@@ -1,0 +1,26 @@
+cabal-version:       >=1.10
+
+name:                stonks
+version:             0.1.0.0
+description:         Stonks is a command-line tool for retrieving stock fundamentals data.
+license:             MIT
+license-file:        LICENSE
+author:              Stephen Radley
+maintainer:          stephen.t.radley@protonmail.com
+copyright:           2020 Stephen Radley
+build-type:          Simple
+
+library
+  exposed-modules:     Stonks
+  ghc-options:         -Wall
+  build-depends:       base >=4.14 && <4.15
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+
+executable stonks
+  main-is:             Stonks.hs
+  build-depends:       base >=4.14 && <4.15
+                     , turtle
+  other-modules:       Paths_stonks
+  hs-source-dirs:      app
+  default-language:    Haskell2010
