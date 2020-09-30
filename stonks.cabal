@@ -12,14 +12,16 @@ build-type:          Simple
 
 library
   exposed-modules:     Stonks
+                     , Tabular 
   ghc-options:         -Wall
   build-depends:       base >=4.14 && <4.15
   hs-source-dirs:      src
   default-language:    Haskell2010
 
 executable stonks
-  main-is:             Stonks.hs
+  main-is:             Main.hs
   build-depends:       base >=4.14 && <4.15
+                     , stonks
                      , turtle
   other-modules:       Paths_stonks
   hs-source-dirs:      app
