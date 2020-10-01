@@ -1,5 +1,6 @@
 module Balance
 ( BalanceSheet (...)
+, headers
 -- , balance
 ) where
 
@@ -38,4 +39,34 @@ data BalanceSheet =
                  -- Total Liabilities and Shareholders' Equity
                  , totalLiabilitiesAndStockholdersEquity :: Int } 
 
+headers :: [String]
+headers = [ "Date"
+          , "Total Current Assets"
+          , "Cash and Short Term Investments"
+          , "Cash and Equivalents"
+          , "Short Term Investments"
+          , "Total Receivables, Net"
+          , "Total Inventory"
+          , "Other Current Assets, Total"
+          , "Total Assets"
+          , "Property/Plant/Equipment, Total - Net"
+          , "Goodwill, Net"
+          , "Intangibles, Net"
+          , "Long Term Investments"
+          , "Other Long Term Assets, Total"
+          , "Total Current Liabilities"
+          , "Accounts Payable"
+          , "Notes Payable/Short Term Debt"
+          , "Other Current Liabilities, Total"
+          , "Total Liabilities"
+          , "Total Long Term Debt"
+          , "Deferred Income Tax"
+          , "Other Liabilities, Total"
+          , "Total Equity"
+          , "Common Stock, Total"
+          , "Retained Earnings"
+          , "Other Equity, Total"
+          , "Total Liabilities and Shareholders' Equity" ]
+
 -- balance :: String -> String -> BalanceSheet 
+
