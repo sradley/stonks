@@ -1,52 +1,77 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import Stonks       as Stonks
+import Stonks as Stonks
+import Turtle as Turtle
 
-import Turtle       as Turtle
-import Paths_stonks (version)
-import Data.Version (showVersion)
-
+-- |Main application description, printed when "help" is called.
 description :: Description
 description = "Stonks is a command-line tool for retrieving stock fundamentals data."
 
-args :: Parser (Text, Maybe Turtle.FilePath)
-args = (,) <$> (argText "symbol" "The symbol(s) to return data for (comma separated).")
-           <*> optional (optPath "csv" 'o' "Output to CSV file.")
+-- |Base arguements for almost all subcommands.
+args :: Parser (Text, (Text, Maybe Turtle.FilePath))
+args = (,) <$> argText "symbol" "The symbol(s) to return data for (comma separated)."
+           <*> args'
+    where
+        args' = (,) <$> argText "exchange" "The exchange the symbol(s) are on."
+                    <*> optional (optPath "csv" 'o' "Output to CSV file (optional).")
 
--- Subcommand handler for retrieving price information.
+-- |Subcommand handler for retrieving price information.
 price :: Parser (IO ())
-price = fmap price' (subcommand "price" "Returns symbol price information." args)
+price = fmap price' sc 
+    where
+        sc = subcommand "price" "Returns symbol price information." args
 
--- Price retrieval subroutine.
-price' :: (Text, Maybe Turtle.FilePath) -> IO ()
+-- |Price retrieval subroutine.
+price' :: (Text, (Text, Maybe Turtle.FilePath)) -> IO ()
 price' (s, _) = print s
 
--- Subcommand handler for retrieving balance sheets.
+-- |Subcommand handler for retrieving balance sheets.
 balance :: Parser (IO ())
-balance = fmap balance' (subcommand "balance" "Returns symbol balance sheet." args)
+balance = fmap balance' sc
+    where
+        sc = subcommand "balance" "Returns symbol balance sheet." args
 
--- Balance sheet retrieval subroutine.
-balance' :: (Text, Maybe Turtle.FilePath) -> IO ()
+-- |Balance sheet retrieval subroutine.
+balance' :: (Text, (Text, Maybe Turtle.FilePath)) -> IO ()
 balance' (s, _) = print s
 
--- Subcommand handler for retrieving income statements.
+-- |Subcommand handler for retrieving income statements.
 income :: Parser (IO ())
-income = fmap income' (subcommand "income" "Returns symbol income statement." args)
+income = fmap income' sc
+    where
+        sc = subcommand "income" "Returns symbol income statement." args
 
--- Income statement retrieval subroutine.
-income' :: (Text, Maybe Turtle.FilePath) -> IO ()
+-- |Income statement retrieval subroutine.
+income' :: (Text, (Text, Maybe Turtle.FilePath)) -> IO ()
 income' (s, _) = print s
 
--- Subcommand handler for printing version information.
-version' :: Parser (IO ())
-version' = subcommand "version" "Prints current version information." (pure v) 
-           where v = putStrLn $ "Stonks " ++ showVersion version
+-- |Subcommand handler for retrieving cash-flow statements.
+cashFlow :: Parser (IO ())
+cashFlow = fmap cashFlow' sc 
+    where
+        sc = subcommand "cash-flow" "Returns symbol cash-flow statement." args
 
+-- |Cash-flow statement retrieval subroutine.
+cashFlow' :: (Text, (Text, Maybe Turtle.FilePath)) -> IO ()
+cashFlow' (s, _) = print s
+
+-- |Subcommand handler for retrieving fundamentals data. 
+fundamentals :: Parser (IO ())
+fundamentals = fmap fundamentals' sc 
+    where
+        sc = subcommand "fundamentals" "Returns symbol fundamentals data." args
+
+-- |Fundamentals data retrieval subroutine.
+fundamentals' :: (Text, (Text, Maybe Turtle.FilePath)) -> IO ()
+fundamentals' (s, _) = print s
+
+-- |Main application parser, handles access to all subcommands.
 parser :: Parser (IO ())
-parser = price <|> balance <|> income <|> version' 
+parser = price <|> balance <|> income <|> cashFlow <|> fundamentals
 
 main :: IO ()
-main = do command <- options description parser
-          command
+main = do
+    command <- options description parser
+    command
 
