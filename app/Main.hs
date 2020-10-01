@@ -3,6 +3,7 @@ module Main where
 
 import Stonks as Stonks
 import Tabular
+import qualified Balance
 import Turtle as Turtle
 
 -- |Main application description, printed when "help" is called.
@@ -25,7 +26,7 @@ balance = fmap balance' sc
 
 -- |Balance sheet retrieval subroutine.
 balance' :: (Text, (Text, Maybe Turtle.FilePath)) -> IO ()
-balance' (s, _) = print s
+balance' _ = putStrLn $ tabulate $ map (\x -> [x]) Balance.headers
 
 -- |Subcommand handler for retrieving income statements.
 income :: Parser (IO ())
