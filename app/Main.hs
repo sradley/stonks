@@ -2,6 +2,7 @@
 module Main where
 
 import Stonks as Stonks
+import Tabular
 import Turtle as Turtle
 
 -- |Main application description, printed when "help" is called.
@@ -14,17 +15,7 @@ args = (,) <$> argText "symbol" "The symbol(s) to return data for (comma separat
            <*> args'
     where
         args' = (,) <$> argText "exchange" "The exchange the symbol(s) are on."
-                    <*> optional (optPath "csv" 'o' "Output to CSV file (optional).")
-
--- |Subcommand handler for retrieving price information.
-price :: Parser (IO ())
-price = fmap price' sc 
-    where
-        sc = subcommand "price" "Returns symbol price information." args
-
--- |Price retrieval subroutine.
-price' :: (Text, (Text, Maybe Turtle.FilePath)) -> IO ()
-price' (s, _) = print s
+                    <*> optional (optPath "csv" 'o' "Output to CSV file (optional).") 
 
 -- |Subcommand handler for retrieving balance sheets.
 balance :: Parser (IO ())
@@ -68,7 +59,7 @@ fundamentals' (s, _) = print s
 
 -- |Main application parser, handles access to all subcommands.
 parser :: Parser (IO ())
-parser = price <|> balance <|> income <|> cashFlow <|> fundamentals
+parser = balance <|> income <|> cashFlow <|> fundamentals
 
 main :: IO ()
 main = do
